@@ -1,1 +1,541 @@
-```html\n<!DOCTYPE html>\n<html lang="en">\n<head>\n <meta charset="UTF-8">\n <meta name="viewport" content="width=device-width, initial-scale=1.0">\n <title>App</title>\n <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">\n <style>\n /* Custom CSS if needed */\n </style>\n</head>\n<body class="bg-gray-100 font-sans antialiased text-gray-900">\n <!-- Dein App-Inhalt wird hier eingefügt -->\n\n <script>\n // Dein JavaScript wird hier eingefügt\n </script>\n</body>\n</html>\n`
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sleek & Dynamic Web Experience</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-accent: #6ee7b7; /* Emerald-300 */
+            --secondary-accent: #38b2ac; /* Teal-500 */
+            --bg-dark: #1a202c; /* Gray-900 */
+            --bg-medium: #2d3748; /* Gray-800 */
+            --text-light: #e2e8f0; /* Gray-200 */
+            --text-dark: #a0aec0; /* Gray-400 */
+            --card-glow: 0 0 15px rgba(56, 178, 172, 0.4);
+            --button-shadow: 0 8px 25px rgba(110, 231, 183, 0.4);
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            line-height: 1.7;
+            color: var(--text-light);
+            background-color: var(--bg-dark);
+            -webkit-font-smoothing: antialiased;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Background glow effect */
+        body::before, body::after {
+            content: '';
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            filter: blur(150px);
+            opacity: 0.2;
+            z-index: -1;
+        }
+
+        body::before {
+            background: linear-gradient(45deg, var(--primary-accent), var(--secondary-accent));
+            top: -100px;
+            left: -100px;
+            animation: moveBlob1 15s infinite alternate ease-in-out;
+        }
+
+        body::after {
+            background: linear-gradient(135deg, var(--secondary-accent), var(--primary-accent));
+            bottom: -100px;
+            right: -100px;
+            animation: moveBlob2 18s infinite alternate-reverse ease-in-out;
+        }
+
+        @keyframes moveBlob1 {
+            0% { transform: translate(0, 0); }
+            50% { transform: translate(80px, 80px); }
+            100% { transform: translate(0, 0); }
+        }
+
+        @keyframes moveBlob2 {
+            0% { transform: translate(0, 0); }
+            50% { transform: translate(-60px, -60px); }
+            100% { transform: translate(0, 0); }
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* Header */
+        header {
+            background-color: rgba(26, 32, 44, 0.8); /* Semi-transparent for blur effect */
+            backdrop-filter: blur(10px);
+            padding: 1.5rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            animation: headerFadeIn 1s ease-out;
+        }
+
+        @keyframes headerFadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-accent);
+            text-decoration: none;
+            letter-spacing: -0.8px;
+            text-shadow: 0 0 12px rgba(110, 231, 183, 0.6);
+            transition: all 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.03) rotate(-2deg);
+            color: var(--secondary-accent);
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+
+        nav ul li {
+            margin-left: 2.5rem;
+        }
+
+        nav ul li a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: 600;
+            padding: 0.6rem 0;
+            position: relative;
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+
+        nav ul li a::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            bottom: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--secondary-accent);
+            transition: width 0.3s ease, left 0.3s ease;
+        }
+
+        nav ul li a:hover {
+            color: var(--primary-accent);
+            transform: translateY(-3px);
+        }
+
+        nav ul li a:hover::after {
+            width: 100%;
+            left: 0;
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 10rem 0 8rem;
+            text-align: center;
+            background: radial-gradient(circle at top left, rgba(56, 178, 172, 0.1) 0%, transparent 40%),
+                        radial-gradient(circle at bottom right, rgba(110, 231, 183, 0.1) 0%, transparent 40%);
+        }
+
+        .hero h1 {
+            font-size: 4.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            line-height: 1.1;
+            background: linear-gradient(45deg, var(--primary-accent), var(--secondary-accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 25px rgba(110, 231, 183, 0.5);
+            animation: textGlow 2s ease-in-out infinite alternate, slideInUp 1s ease-out;
+        }
+
+        @keyframes textGlow {
+            from { text-shadow: 0 0 15px rgba(110, 231, 183, 0.5); }
+            to { text-shadow: 0 0 30px rgba(110, 231, 183, 0.8); }
+        }
+
+        @keyframes slideInUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .hero p {
+            font-size: 1.4rem;
+            max-width: 900px;
+            margin: 0 auto 3rem;
+            color: var(--text-dark);
+            opacity: 0.9;
+            animation: fadeIn 1.2s ease-out 0.4s backwards;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(90deg, var(--primary-accent) 0%, var(--secondary-accent) 100%);
+            color: var(--bg-dark);
+            padding: 1.2rem 3rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.15rem;
+            transition: all 0.4s ease-in-out;
+            box-shadow: var(--button-shadow);
+            position: relative;
+            overflow: hidden;
+            border: none;
+            cursor: pointer;
+            outline: none;
+            animation: fadeIn 1.2s ease-out 0.8s backwards;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: skewX(-30deg);
+            transition: left 0.5s ease;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn:hover {
+            transform: translateY(-7px) scale(1.03);
+            box-shadow: 0 12px 30px rgba(110, 231, 183, 0.6);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Features Section */
+        .features {
+            padding: 7rem 0;
+            background-color: var(--bg-dark);
+            text-align: center;
+        }
+
+        .features h2 {
+            font-size: 3.5rem;
+            color: var(--text-light);
+            margin-bottom: 5rem;
+            font-weight: 700;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.15);
+            animation: fadeIn 1s ease-out;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .feature-card {
+            background-color: var(--bg-medium);
+            border-radius: 15px;
+            padding: 3rem;
+            text-align: left;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+            transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            animation: cardFadeIn 1s ease-out var(--delay, 0s) backwards;
+        }
+
+        @keyframes cardFadeIn {
+            from { opacity: 0; transform: scale(0.95) translateY(20px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        .feature-card:nth-child(1) { --delay: 0.1s; }
+        .feature-card:nth-child(2) { --delay: 0.2s; }
+        .feature-card:nth-child(3) { --delay: 0.3s; }
+        .feature-card:nth-child(4) { --delay: 0.4s; }
+        .feature-card:nth-child(5) { --delay: 0.5s; }
+        .feature-card:nth-child(6) { --delay: 0.6s; }
+
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(110, 231, 183, 0.1) 0%, transparent 70%);
+            filter: blur(80px);
+            opacity: 0;
+            transition: opacity 0.6s ease;
+        }
+
+        .feature-card:hover::before {
+            opacity: 1;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-15px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), var(--card-glow);
+        }
+
+        .feature-card .icon {
+            font-size: 3.5rem;
+            color: var(--primary-accent);
+            margin-bottom: 1.5rem;
+            display: inline-block;
+            background: linear-gradient(45deg, var(--primary-accent), var(--secondary-accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            transition: transform 0.3s ease;
+        }
+
+        .feature-card:hover .icon {
+            transform: rotate(5deg) scale(1.1);
+        }
+
+        .feature-card h3 {
+            font-size: 1.8rem;
+            color: var(--text-light);
+            margin-bottom: 1rem;
+            font-weight: 700;
+            line-height: 1.3;
+        }
+
+        .feature-card p {
+            color: var(--text-dark);
+            font-size: 1.05rem;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--bg-medium);
+            padding: 3rem 0;
+            text-align: center;
+            color: var(--text-dark);
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            margin-top: auto;
+            animation: fadeIn 1s ease-out 1s backwards;
+        }
+
+        footer .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        footer .social-links {
+            margin-top: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        footer .social-links a {
+            color: var(--text-dark);
+            font-size: 1.6rem;
+            margin: 0 1rem;
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+
+        footer .social-links a:hover {
+            color: var(--primary-accent);
+            transform: translateY(-5px) scale(1.1);
+        }
+
+        footer p {
+            font-size: 0.95rem;
+            margin-top: 0.5rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .hero h1 {
+                font-size: 3.5rem;
+            }
+            .hero p {
+                font-size: 1.2rem;
+            }
+            .features h2 {
+                font-size: 2.8rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            header .container {
+                flex-direction: column;
+            }
+            nav ul {
+                margin-top: 1.5rem;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            nav ul li {
+                margin: 0.5rem 1rem;
+            }
+            .hero {
+                padding: 8rem 0 6rem;
+            }
+            .hero h1 {
+                font-size: 3rem;
+            }
+            .hero p {
+                font-size: 1.1rem;
+            }
+            .btn {
+                padding: 1rem 2.5rem;
+                font-size: 1rem;
+            }
+            .features h2 {
+                font-size: 2.3rem;
+                margin-bottom: 3rem;
+            }
+            .feature-card {
+                padding: 2rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .container {
+                padding: 0 1rem;
+            }
+            .logo {
+                font-size: 1.8rem;
+            }
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            .hero p {
+                font-size: 1rem;
+            }
+            .features h2 {
+                font-size: 2rem;
+            }
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+            .feature-card .icon {
+                font-size: 3rem;
+            }
+            .feature-card h3 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <a href="#" class="logo">VisionForge</a>
+            <nav>
+                <ul>
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#portfolio">Portfolio</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section id="home" class="hero">
+            <div class="container">
+                <h1>Unleash the Power of Modern Web Design</h1>
+                <p>Crafting captivating digital experiences with cutting-edge technology and aesthetic brilliance. Dive into a world where design meets performance.</p>
+                <a href="#features" class="btn">Discover Our Work</a>
+            </div>
+        </section>
+
+        <section id="features" class="features">
+            <div class="container">
+                <h2>Why Collaborate with Us?</h2>
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <div class="icon">✨</div>
+                        <h3>Pixel-Perfect Aesthetics</h3>
+                        <p>Every detail meticulously crafted for visual harmony and an unforgettable user journey.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="icon">🚀</div>
+                        <h3>Optimized Performance</h3>
+                        <p>Blazing-fast load times and smooth interactions ensure your users never wait.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="icon">💡</div>
+                        <h3>Innovative Solutions</h3>
+                        <p>Beyond current trends, we build forward-thinking designs that stand the test of time.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="icon">📱</div>
+                        <h3>Seamless Responsiveness</h3>
+                        <p>Your site will shine on every device, from mobile to desktop, without compromise.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="icon">🔒</div>
+                        <h3>Robust Security</h3>
+                        <p>Implementing best practices to protect your data and provide a secure online environment.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="icon">📈</div>
+                        <h3>Scalable Architecture</h3>
+                        <p>Built for growth, our foundations support your future expansions and evolving needs.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Additional sections like Portfolio, Contact would go here -->
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2023 VisionForge. All rights reserved.</p>
+            <div class="social-links">
+                <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+            </div>
+            <p>Crafted with passion for the digital age.</p>
+        </div>
+    </footer>
+    <!-- Font Awesome for social icons. Using defer for better performance. -->
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js" integrity="sha512-FlexrA9o9kC6aKzC4F1C7j+8a5q5n5t4h5j4o5e5n5a5d5i5j5k5l5m5n5o5p5q5r5s5t5u5v5w5x5y5z" crossorigin="anonymous"></script>
+</body>
+</html>
