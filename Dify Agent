@@ -1,200 +1,96 @@
-app:
-  description: 'Sharing makes it easy '
-  icon: ae1ef507-e7ea-4244-a541-f267e1a44286
-  icon_background: '#FFEAD5'
-  mode: advanced-chat
-  name: Green
-  use_icon_as_answer_icon: false
-dependencies:
-- current_identifier: null
-  type: marketplace
-  value:
-    marketplace_plugin_unique_identifier: langgenius/gemini:0.7.6@ccaa2e58d18bf41746aa082a15a8fec7ea851886a1727cb4636571603bbb5351
-    version: null
-kind: app
-version: 0.5.0
-workflow:
-  conversation_variables: []
-  environment_variables: []
-  features:
-    file_upload:
-      allowed_file_extensions:
-      - .JPG
-      - .JPEG
-      - .PNG
-      - .GIF
-      - .WEBP
-      - .SVG
-      allowed_file_types:
-      - image
-      allowed_file_upload_methods:
-      - local_file
-      - remote_url
-      enabled: false
-      fileUploadConfig:
-        attachment_image_file_size_limit: 2
-        audio_file_size_limit: 50
-        batch_count_limit: 5
-        file_size_limit: 15
-        file_upload_limit: 50
-        image_file_batch_limit: 10
-        image_file_size_limit: 10
-        single_chunk_attachment_limit: 10
-        video_file_size_limit: 100
-        workflow_file_upload_limit: 10
-      image:
-        enabled: false
-        number_limits: 3
-        transfer_methods:
-        - local_file
-        - remote_url
-      number_limits: 3
-    opening_statement: ''
-    retriever_resource:
-      enabled: true
-    sensitive_word_avoidance:
-      enabled: false
-    speech_to_text:
-      enabled: false
-    suggested_questions: []
-    suggested_questions_after_answer:
-      enabled: false
-    text_to_speech:
-      enabled: false
-      language: ''
-      voice: ''
-  graph:
-    edges:
-    - data:
-        sourceType: start
-        targetType: llm
-      id: 1770440269707-llm
-      source: '1770440269707'
-      sourceHandle: source
-      target: llm
-      targetHandle: target
-      type: custom
-    - data:
-        sourceType: llm
-        targetType: answer
-      id: llm-answer
-      source: llm
-      sourceHandle: source
-      target: answer
-      targetHandle: target
-      type: custom
-    nodes:
-    - data:
-        selected: false
-        title: Start
-        type: start
-        variables: []
-      height: 73
-      id: '1770440269707'
-      position:
-        x: 79
-        y: 282
-      positionAbsolute:
-        x: 79
-        y: 282
-      selected: true
-      sourcePosition: right
-      targetPosition: left
-      type: custom
-      width: 242
-    - data:
-        context:
-          enabled: false
-          variable_selector: []
-        memory:
-          query_prompt_template: '{{#sys.query#}}
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GreenRide</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: system-ui, sans-serif; background: #f3f4f6; }
+    #chat { max-height: 70vh; overflow-y: auto; padding: 1rem; }
+    .bubble { max-width: 80%; padding: 14px 18px; border-radius: 20px; margin-bottom: 12px; }
+    .user { background: #10b981; color: white; align-self: flex-end; }
+    .agent { background: #e5e7eb; color: black; align-self: flex-start; }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col">
 
+<header class="bg-green-600 text-white p-4 text-center">
+  <h1 class="text-3xl font-bold">🚗 GreenRide</h1>
+  <p class="text-sm opacity-90">Dein persönlicher Fahrt-Assistent</p>
+</header>
 
-            {{#sys.files#}}'
-          role_prefix:
-            assistant: ''
-            user: ''
-          window:
-            enabled: false
-            size: 10
-        model:
-          completion_params:
-            temperature: 0.7
-          mode: chat
-          name: gemini-2.5-flash
-          provider: langgenius/gemini/google
-        prompt_template:
-        - id: 1d773f8f-482a-49d0-8610-59388304dedd
-          role: system
-          text: "Du bist Green – der persönliche, freundliche und super hilfsbereite\
-            \ Fahrt-Vermittler in meiner App.\n\nDu hilfst Leuten sofort, wenn sie\
-            \ die App öffnen. Du bist wie ein netter Fahrer-Freund, der immer in der\
-            \ Nähe ist.\n\nWICHTIG: Du simulierst eine echte App – du zeigst \"Screens\"\
-            \ als Text + Markdown (Listen, Buttons, Karten-Simulation).\n\nDein typischer\
-            \ Ablauf – immer so ähnlich:\n\n1. Begrüßung bei jedem neuen Chat (oder\
-            \ wenn User \"neu starten\" sagt):\n   - \"Hallo! \U0001F697 Willkommen\
-            \ in GreenRide – deiner schnellen Fahrt-App!\"\n   - \"Wo möchtest du\
-            \ abgeholt werden? Schreib deine Adresse, Stadtteil oder sag 'aktueller\
-            \ Standort'.\"\n\n2. Abholort bekommen → simuliere nahe Autos (fake Daten,\
-            \ bis wir echte haben):\n   - \"Super! Du bist in [Ort]. Hier sind 3 Fahrzeuge\
-            \ in der Nähe:\"\n     1. Silberner VW Golf – 2,8 km entfernt – 4,9 ★\
-            \ – kommt in 5 Min – Preis ca. 12 €\n     2. Schwarzer Skoda Octavia –\
-            \ 1,9 km – 4,7 ★ – 7 Min – Preis ca. 10 €\n     3. Weißer Tesla Model\
-            \ 3 – 4,1 km – 5 ★ – 9 Min – Preis ca. 15 €\n   - \"Welchen möchtest du\
-            \ nehmen? Schreib die Nummer oder sag 'keiner passt'.\"\n\n3. User wählt\
-            \ → führe durch:\n   - \"Okay, du nimmst den silbernen Golf! Fahrer heißt\
-            \ Max, er ist in 4 Minuten da.\"\n   - \"Zahlung: Bar, App oder Karte?\"\
-            \n   - \"Fahrt bestätigt! Du kannst mit Max chatten oder die Karte tracken.\"\
-            \n\n4. Bei jedem Schritt: \n   - Frag nach, wenn unklar\n   - Zeig Optionen\
-            \ als nummerierte Liste oder \"Buttons\" (z. B. 1. Ja 2. Nein 3. Andere\
-            \ Adresse)\n   - Bleib immer im Chat – antworte natürlich und freundlich\n\
-            \n5. Wenn User etwas anderes will (z. B. \"ändere Ziel\", \"stornieren\"\
-            , \"wie viel kostet es?\"):\n   - Reagiere direkt und passe den Flow an\n\
-            \   - Nutze die ganze Konversation (du erinnerst dich an vorherige Infos!)\n\
-            \n6. Kein HTML-Code generieren – nur Text + Markdown für \"App-Screens\"\
-            .\n   - Beispiel für \"Screen\":\n     **\U0001F5FA️ Abholort: Hauptbahnhof**\n\
-            \     **Verfügbare Fahrzeuge:**\n     1. Silber VW Golf – 5 Min – 12 €\n\
-            \     2. ...\n\nSprich immer auf Deutsch, freundlich, kurz und klar. Du\
-            \ bist der Star der App!"
-        selected: false
-        title: LLM
-        type: llm
-        vision:
-          enabled: false
-      height: 88
-      id: llm
-      position:
-        x: 418
-        y: 288
-      positionAbsolute:
-        x: 418
-        y: 288
-      selected: false
-      sourcePosition: right
-      targetPosition: left
-      type: custom
-      width: 242
-    - data:
-        answer: '{{#llm.text#}}'
-        selected: false
-        title: Antwort
-        type: answer
-        variables: []
-      height: 102
-      id: answer
-      position:
-        x: 680
-        y: 282
-      positionAbsolute:
-        x: 680
-        y: 282
-      selected: false
-      sourcePosition: right
-      targetPosition: left
-      type: custom
-      width: 242
-    viewport:
-      x: -410.5
-      y: 98.5
-      zoom: 1
-  rag_pipeline_variables: []
+<main class="flex-1 p-4 max-w-3xl mx-auto flex flex-col">
+  <div id="chat" class="flex flex-col space-y-4 bg-white rounded-3xl shadow p-4 flex-1"></div>
+
+  <div class="mt-4 flex gap-2">
+    <input id="input" type="text" placeholder="Schreib deine Nachricht..." 
+           class="flex-1 p-4 border rounded-full focus:outline-none focus:ring-4 focus:ring-green-200">
+    <button onclick="sendMessage()" 
+            class="bg-green-600 hover:bg-green-700 text-white px-8 py-4 rounded-full font-bold">Senden</button>
+  </div>
+</main>
+
+<script>
+  // ←←← HIER DEINE DATEN EINFÜGEN
+  const API_URL = "https://api.dify.ai/v1/chat-messages";
+  const API_KEY = "app-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";   // ← Dein Key hier rein!
+  // ←←← ENDE
+
+  let conversationId = null;
+
+  function addMessage(text, isUser) {
+    const chat = document.getElementById('chat');
+    const div = document.createElement('div');
+    div.className = `bubble ${isUser ? 'user' : 'agent'}`;
+    div.innerHTML = text.replace(/\n/g, '<br>');
+    chat.appendChild(div);
+    chat.scrollTop = chat.scrollHeight;
+  }
+
+  async function sendMessage() {
+    const input = document.getElementById('input');
+    const msg = input.value.trim();
+    if (!msg) return;
+
+    addMessage(msg, true);           // User-Nachricht
+    input.value = '';
+
+    try {
+      const res = await fetch(API_URL, {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${API_KEY}`,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          query: msg,
+          response_mode: "blocking",
+          conversation_id: conversationId || "",
+          user: "web-user"
+        })
+      });
+
+      const data = await res.json();
+
+      addMessage(data.answer || "Fehler – keine Antwort", false);
+
+      if (data.conversation_id) conversationId = data.conversation_id;
+
+    } catch (e) {
+      addMessage("Verbindung fehlgeschlagen 😔 (API-Key oder Internet prüfen)", false);
+    }
+  }
+
+  // Enter-Taste
+  document.getElementById('input').addEventListener('keypress', e => {
+    if (e.key === "Enter") sendMessage();
+  });
+
+  // Begrüßung beim Laden
+  window.onload = () => {
+    addMessage("Hallo! 🚗 Willkommen bei GreenRide!<br>Wo möchtest du abgeholt werden?", false);
+  };
+</script>
+</body>
+</html>
