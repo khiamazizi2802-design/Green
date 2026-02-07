@@ -1,96 +1,118 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GreenRide</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>GreenRide – Deine Fahrt-App</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     body { font-family: system-ui, sans-serif; background: #f3f4f6; }
     #chat { max-height: 70vh; overflow-y: auto; padding: 1rem; }
-    .bubble { max-width: 80%; padding: 14px 18px; border-radius: 20px; margin-bottom: 12px; }
+    .bubble { max-width: 80%; padding: 0.75rem 1rem; border-radius: 1rem; margin-bottom: 1rem; }
     .user { background: #10b981; color: white; align-self: flex-end; }
     .agent { background: #e5e7eb; color: black; align-self: flex-start; }
   </style>
 </head>
 <body class="min-h-screen flex flex-col">
 
-<header class="bg-green-600 text-white p-4 text-center">
-  <h1 class="text-3xl font-bold">🚗 GreenRide</h1>
-  <p class="text-sm opacity-90">Dein persönlicher Fahrt-Assistent</p>
-</header>
+  <header class="bg-green-600 text-white p-4 text-center">
+    <h1 class="text-2xl font-bold">🚗 GreenRide</h1>
+    <p class="text-sm">Dein persönlicher Fahrt-Assistent</p>
+  </header>
 
-<main class="flex-1 p-4 max-w-3xl mx-auto flex flex-col">
-  <div id="chat" class="flex flex-col space-y-4 bg-white rounded-3xl shadow p-4 flex-1"></div>
+  <main class="flex-1 p-4 max-w-3xl mx-auto flex flex-col">
+    <div id="chat" class="flex flex-col space-y-3">
+      <div class="bubble agent">
+        Hallo! 🚗 Willkommen bei GreenRide!<br>
+        Wo möchtest du abgeholt werden?<br>
+        Schreib deine Adresse oder sag „aktueller Standort“.
+      </div>
+    </div>
 
-  <div class="mt-4 flex gap-2">
-    <input id="input" type="text" placeholder="Schreib deine Nachricht..." 
-           class="flex-1 p-4 border rounded-full focus:outline-none focus:ring-4 focus:ring-green-200">
-    <button onclick="sendMessage()" 
-            class="bg-green-600 hover:bg-green-700 text-white px-8 py-4 rounded-full font-bold">Senden</button>
-  </div>
-</main>
+    <div class="mt-auto pt-4">
+      <div class="flex gap-2">
+        <input id="input" type="text" placeholder="Deine Nachricht..." class="flex-1 p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-green-500">
+        <button onclick="sendMessage()" class="bg-green-600 text-white px-6 py-3 rounded-full font-bold">Senden</button>
+      </div>
+    </div>
+  </main>
 
-<script>
-  // ←←← HIER DEINE DATEN EINFÜGEN
-  const API_URL = "https://api.dify.ai/v1/chat-messages";
-  const API_KEY = "app-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";   // ← Dein Key hier rein!
-  // ←←← ENDE
+  <script>
+    const API_URL = 'https://api.dify.ai/v1/chat-messages';  // ← Deine Dify Base URL + /chat-messages
+    const API_KEY = 'app-dein-api-key-hier-einfuegen';       // ← Dein API-Key (nur zum Testen!)
 
-  let conversationId = null;
+    let conversationId = null;  // Wird beim ersten Call automatisch gesetzt
 
-  function addMessage(text, isUser) {
-    const chat = document.getElementById('chat');
-    const div = document.createElement('div');
-    div.className = `bubble ${isUser ? 'user' : 'agent'}`;
-    div.innerHTML = text.replace(/\n/g, '<br>');
-    chat.appendChild(div);
-    chat.scrollTop = chat.scrollHeight;
-  }
+    async function sendMessage() {
+      const input = document.getElementById('input');
+      const chat = document.getElementById('chat');
+      const message = input.value.trim();
+      if (!message) return;
 
-  async function sendMessage() {
-    const input = document.getElementById('input');
-    const msg = input.value.trim();
-    if (!msg) return;
+      // User-Nachricht anzeigen
+      const userBubble = document.createElement('div');
+      userBubble.className = 'bubble user ml-auto';
+      userBubble.textContent = message;
+      chat.appendChild(userBubble);
+      chat.scrollTop = chat.scrollHeight;
 
-    addMessage(msg, true);           // User-Nachricht
-    input.value = '';
+      input.value = '';
 
-    try {
-      const res = await fetch(API_URL, {
-        method: "POST",
-        headers: {
-          "Authorization": `Bearer ${API_KEY}`,
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          query: msg,
-          response_mode: "blocking",
-          conversation_id: conversationId || "",
-          user: "web-user"
-        })
-      });
+      try {
+        const body = {
+          inputs: {},               // Falls du Variablen aus Dify hast
+          query: message,
+          response_mode: 'blocking',  // 'blocking' = volle Antwort warten (einfacher zum Start)
+          // 'streaming' für echte Streaming-Antworten (später)
+          user: 'web-user-' + Date.now(),  // Eindeutiger User-ID
+        };
 
-      const data = await res.json();
+        if (conversationId) {
+          body.conversation_id = conversationId;
+        }
 
-      addMessage(data.answer || "Fehler – keine Antwort", false);
+        const res = await fetch(API_URL, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${API_KEY}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(body)
+        });
 
-      if (data.conversation_id) conversationId = data.conversation_id;
+        if (!res.ok) {
+          throw new Error(`API Fehler: ${res.status}`);
+        }
 
-    } catch (e) {
-      addMessage("Verbindung fehlgeschlagen 😔 (API-Key oder Internet prüfen)", false);
+        const data = await res.json();
+
+        // Antwort anzeigen
+        const agentBubble = document.createElement('div');
+        agentBubble.className = 'bubble agent';
+        agentBubble.innerHTML = data.answer.replace(/\n/g, '<br>');  // Formatierung
+
+        chat.appendChild(agentBubble);
+        chat.scrollTop = chat.scrollHeight;
+
+        // Conversation-ID für nächsten Call speichern
+        if (data.conversation_id) {
+          conversationId = data.conversation_id;
+        }
+
+      } catch (err) {
+        console.error(err);
+        const errorBubble = document.createElement('div');
+        errorBubble.className = 'bubble agent bg-red-100 text-red-800';
+        errorBubble.textContent = 'Fehler: Konnte nicht mit Green sprechen 😔';
+        chat.appendChild(errorBubble);
+        chat.scrollTop = chat.scrollHeight;
+      }
     }
-  }
 
-  // Enter-Taste
-  document.getElementById('input').addEventListener('keypress', e => {
-    if (e.key === "Enter") sendMessage();
-  });
-
-  // Begrüßung beim Laden
-  window.onload = () => {
-    addMessage("Hallo! 🚗 Willkommen bei GreenRide!<br>Wo möchtest du abgeholt werden?", false);
-  };
-</script>
+    // Enter-Taste zum Senden
+    document.getElementById('input').addEventListener('keypress', e => {
+      if (e.key === 'Enter') sendMessage();
+    });
+  </script>
 </body>
 </html>
